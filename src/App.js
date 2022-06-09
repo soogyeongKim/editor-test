@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import theme from 'styles/Theme';
+import GlobalStyle from 'styles/GlobalStyles';
+import ScrollToTop from 'components/Element/ScrollToTop';
+import IEComponent from 'components/Element/IE/IEComponent';
+import checkIE from 'modules/checkIE';
+import Main from 'routes/Main';
+import NotFound from 'routes/NotFound';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+function App(props) {
+  const isIE = checkIE();
+
+  return isIE ? (
+    <IEComponent />
+  ) : (
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <BrowserRouter>
+        <ScrollToTop>
+          <Routes>
+            <Route path="*" element={<NotFound />} />
+            <Route path="/" element={<Main />} />
+          </Routes>
+        </ScrollToTop>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
